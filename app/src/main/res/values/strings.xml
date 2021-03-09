@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ToDo App Project</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_data_text">No data</string>
+    <string name="to_do_title">Title</string>
+    <string name="to_do_description">Description</string>
+
+    <string-array name ="priorities">
+        <item>High priority </item>
+        <item>Medium priority </item>
+        <item>Low priority </item>
+    </string-array>
+</resources>
