@@ -5,6 +5,11 @@
     <string name="no_data_text">No data</string>
     <string name="to_do_title">Title</string>
     <string name="to_do_description">Description</string>
+    <string name="search_text">Search</string>
+    <string name="sort_by_text">Sort By</string>
+    <string name="priority_high_text">Priority High</string>
+    <string name="priority_low_text">Priority Low</string>
+    <string name="delete_all_text">Delete All</string>
 
     <string-array name ="priorities">
         <item>High priority </item>
