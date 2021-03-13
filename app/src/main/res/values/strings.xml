@@ -10,6 +10,7 @@
     <string name="priority_high_text">Priority High</string>
     <string name="priority_low_text">Priority Low</string>
     <string name="delete_all_text">Delete All</string>
+    <string name="add_text">Add</string>
 
     <string-array name ="priorities">
         <item>High priority </item>
