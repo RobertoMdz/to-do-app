@@ -1,6 +1,7 @@
 package com.coopera.todoappproject.data
 
 import androidx.room.TypeConverter
+import com.coopera.todoappproject.data.models.Priority
 
 class Converter {
 
