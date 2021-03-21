@@ -15,8 +15,8 @@
     <string name="delete_text">Delete</string>
 
     <string-array name ="priorities">
-        <item>High priority </item>
-        <item>Medium priority </item>
-        <item>Low priority </item>
+        <item>High Priority </item>
+        <item>Medium Priority </item>
+        <item>Low Priority </item>
     </string-array>
 </resources>
