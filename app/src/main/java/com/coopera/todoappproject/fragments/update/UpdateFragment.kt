@@ -31,17 +31,16 @@ class UpdateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        // Data Binding
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.args = args
 
         // Set menu
         setHasOptionsMenu(true)
 
-        val toDoArg = args.currentItem
-
-        binding.edtxtCurrentTodoTitle.setText(toDoArg.title)
-        binding.currentSpinnerPriorities.setSelection(mSharedViewModel.parsePriorityToInt(toDoArg.priority))
+        // Spinner Item Selected listener
         binding.currentSpinnerPriorities.onItemSelectedListener = mSharedViewModel.listener
-        binding.edtxtCurrentTodoDescription.setText(toDoArg.description)
 
         return binding.root
     }
@@ -97,6 +96,11 @@ class UpdateFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.update_fragment_menu, menu)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

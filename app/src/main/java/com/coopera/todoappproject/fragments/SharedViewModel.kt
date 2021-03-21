@@ -14,6 +14,8 @@ import com.coopera.todoappproject.data.models.ToDoData
 
 class SharedViewModel(application: Application): AndroidViewModel(application) {
 
+    //** ======================= Add/Update Fragment =============================== **/
+
     val listener: AdapterView.OnItemSelectedListener = object :
         AdapterView.OnItemSelectedListener{
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -47,13 +49,7 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
         } else !(title.isEmpty() || description.isEmpty())
     }
 
-    fun parsePriorityToInt(priority: Priority): Int {
-        return when(priority) {
-            Priority.HIGH -> 0
-            Priority.MEDIUM -> 1
-            Priority.LOW -> 2
-        }
-    }
+    /** ====================== List Fragment =========================== **/
 
     val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
     fun checkIfDatabaseIsEmpty(toDoData: List<ToDoData>) {

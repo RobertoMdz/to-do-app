@@ -7,12 +7,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.coopera.todoappproject.R
 import com.coopera.todoappproject.data.viewmodel.ToDoViewModel
 import com.coopera.todoappproject.databinding.FragmentListBinding
 import com.coopera.todoappproject.fragments.SharedViewModel
+import com.coopera.todoappproject.fragments.list.adapter.ListAdapter
 
 class ListFragment : Fragment() {
 
@@ -29,35 +29,27 @@ class ListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentListBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mSharedViewModel = mSharedViewModel
 
-        val recyclerView = binding.recyclerView
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        // Setup RecyclerView
+        setupRecyclerView()
+
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
             data ->
                 mSharedViewModel.checkIfDatabaseIsEmpty(data)
                 adapter.setData(data)
         })
 
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
-        }
-
-        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner) {
-            showEmptyDatabaseViews(it)
-        }
-
         // Set menu
         setHasOptionsMenu(true)
         return binding.root
     }
 
-    private fun showEmptyDatabaseViews(emptyDatabase: Boolean) {
-        if (emptyDatabase) {
-            binding.noDataLayoutContent.visibility = View.VISIBLE
-        } else {
-            binding.noDataLayoutContent.visibility = View.INVISIBLE
-        }
+    private fun setupRecyclerView() {
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -86,6 +78,11 @@ class ListFragment : Fragment() {
         builder.setTitle("Delete everything?")
         builder.setMessage("Are you sure you want to remove everything?")
         builder.create().show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 
