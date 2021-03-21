@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.coopera.todoappproject.R
 import com.coopera.todoappproject.data.viewmodel.ToDoViewModel
 import com.coopera.todoappproject.databinding.FragmentListBinding
+import com.coopera.todoappproject.fragments.SharedViewModel
 
 class ListFragment : Fragment() {
 
@@ -20,6 +21,7 @@ class ListFragment : Fragment() {
 
     private val adapter: ListAdapter by lazy { ListAdapter() }
     private val mToDoViewModel: ToDoViewModel by viewModels()
+    private val mSharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,16 +34,30 @@ class ListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
-            data -> adapter.setData(data)
+            data ->
+                mSharedViewModel.checkIfDatabaseIsEmpty(data)
+                adapter.setData(data)
         })
 
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
+        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner) {
+            showEmptyDatabaseViews(it)
+        }
+
         // Set menu
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun showEmptyDatabaseViews(emptyDatabase: Boolean) {
+        if (emptyDatabase) {
+            binding.noDataLayoutContent.visibility = View.VISIBLE
+        } else {
+            binding.noDataLayoutContent.visibility = View.INVISIBLE
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

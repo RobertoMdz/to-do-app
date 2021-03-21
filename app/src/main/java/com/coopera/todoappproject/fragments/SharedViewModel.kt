@@ -7,8 +7,10 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.coopera.todoappproject.R
 import com.coopera.todoappproject.data.models.Priority
+import com.coopera.todoappproject.data.models.ToDoData
 
 class SharedViewModel(application: Application): AndroidViewModel(application) {
 
@@ -51,6 +53,11 @@ class SharedViewModel(application: Application): AndroidViewModel(application) {
             Priority.MEDIUM -> 1
             Priority.LOW -> 2
         }
+    }
+
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
+    fun checkIfDatabaseIsEmpty(toDoData: List<ToDoData>) {
+        emptyDatabase.value = toDoData.isEmpty()
     }
 
 }
