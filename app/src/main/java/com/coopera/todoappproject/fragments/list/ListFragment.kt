@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.coopera.todoappproject.R
+import com.coopera.todoappproject.data.models.ToDoData
 import com.coopera.todoappproject.data.viewmodel.ToDoViewModel
 import com.coopera.todoappproject.databinding.FragmentListBinding
 import com.coopera.todoappproject.fragments.SharedViewModel
 import com.coopera.todoappproject.fragments.list.adapter.ListAdapter
+import com.google.android.material.snackbar.Snackbar
 
 class ListFragment : Fragment() {
 
@@ -60,13 +62,25 @@ class ListFragment : Fragment() {
     private fun swipeToDelete(recyclerView: RecyclerView) {
         val swipeToDeleteCallback = object : SwipeToDelete() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val itemToDelete = adapter.dataList[viewHolder.adapterPosition]
-                mToDoViewModel.deleteItem(itemToDelete)
-                Toast.makeText(requireContext(), "Successfully Removed: ${itemToDelete.title}", Toast.LENGTH_SHORT).show()
+                val deletedItem = adapter.dataList[viewHolder.adapterPosition]
+                // Delete Item
+                mToDoViewModel.deleteItem(deletedItem)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+                // Show Restore Deleted Item Snackbar
+                restoredDeletedItem(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun restoredDeletedItem(view: View, deletedItem: ToDoData, position: Int) {
+        val snackBar = Snackbar.make(view, "Deleted ${deletedItem.title}", Snackbar.LENGTH_LONG)
+        snackBar.setAction("Undo") {
+            mToDoViewModel.insertData(deletedItem)
+            adapter.notifyItemChanged(position)
+        }
+        snackBar.show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
