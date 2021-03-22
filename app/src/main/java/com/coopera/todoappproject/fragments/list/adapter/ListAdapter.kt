@@ -2,6 +2,7 @@ package com.coopera.todoappproject.fragments.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.coopera.todoappproject.data.models.ToDoData
 import com.coopera.todoappproject.databinding.RowLayoutBinding
@@ -20,8 +21,11 @@ class ListAdapter: RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
     }
 
     fun setData(toDoData: List<ToDoData>) {
-        dataList = toDoData
-        notifyDataSetChanged()
+
+        val toDoDiffUtil = ToDoDiffUtil(dataList, toDoData)
+        val toDoDiffResult = DiffUtil.calculateDiff(toDoDiffUtil)
+        this.dataList = toDoData
+        toDoDiffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount(): Int {
