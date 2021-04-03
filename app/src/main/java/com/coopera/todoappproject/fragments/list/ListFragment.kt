@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.coopera.todoappproject.R
@@ -19,7 +18,6 @@ import com.coopera.todoappproject.databinding.FragmentListBinding
 import com.coopera.todoappproject.fragments.SharedViewModel
 import com.coopera.todoappproject.fragments.list.adapter.ListAdapter
 import com.google.android.material.snackbar.Snackbar
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
 class ListFragment : Fragment(), SearchView.OnQueryTextListener {
@@ -43,7 +41,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         // Setup RecyclerView
         setupRecyclerView()
 
-        mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner, {
             data ->
                 mSharedViewModel.checkIfDatabaseIsEmpty(data)
                 adapter.setData(data)
@@ -57,7 +55,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setupRecyclerView() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(getActivity())
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.itemAnimator = SlideInUpAnimator().apply {
             addDuration = 300
         }
@@ -101,8 +99,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.menu_delete_all -> confirmItemRemoval()
-            R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, Observer { adapter.setData(it)})
-            R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, Observer { adapter.setData(it)})
+            R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, { adapter.setData(it)})
+            R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, { adapter.setData(it)})
         }
         return super.onOptionsItemSelected(item)
     }
@@ -123,7 +121,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun searchThroughDatabase(query: String) {
         val searchQuery: String = "%$query%"
-        mToDoViewModel.searchDatabase(searchQuery).observe(this, Observer {
+        mToDoViewModel.searchDatabase(searchQuery).observe(this, {
             list ->
             list?.let {
                 adapter.setData(it)
