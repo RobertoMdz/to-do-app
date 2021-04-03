@@ -9,10 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.coopera.todoappproject.R
-import com.coopera.todoappproject.data.models.Priority
 import com.coopera.todoappproject.data.models.ToDoData
 import com.coopera.todoappproject.data.viewmodel.ToDoViewModel
-import com.coopera.todoappproject.databinding.FragmentListBinding
 import com.coopera.todoappproject.databinding.FragmentUpdateBinding
 import com.coopera.todoappproject.fragments.SharedViewModel
 
