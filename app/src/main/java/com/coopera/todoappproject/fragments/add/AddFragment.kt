@@ -71,4 +71,9 @@ class AddFragment : Fragment() {
         inflater.inflate(R.menu.add_fragment_menu, menu)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
 }
