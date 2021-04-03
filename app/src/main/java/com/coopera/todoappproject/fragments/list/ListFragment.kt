@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.coopera.todoappproject.R
 import com.coopera.todoappproject.data.models.ToDoData
 import com.coopera.todoappproject.data.viewmodel.ToDoViewModel
@@ -33,7 +34,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
@@ -56,7 +57,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setupRecyclerView() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        recyclerView.layoutManager = LinearLayoutManager(getActivity())
         recyclerView.itemAnimator = SlideInUpAnimator().apply {
             addDuration = 300
         }
@@ -73,18 +74,17 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 mToDoViewModel.deleteItem(deletedItem)
                 adapter.notifyItemRemoved(viewHolder.adapterPosition)
                 // Show Restore Deleted Item Snackbar
-                restoredDeletedItem(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
+                restoredDeletedItem(viewHolder.itemView, deletedItem)
             }
         }
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun restoredDeletedItem(view: View, deletedItem: ToDoData, position: Int) {
+    private fun restoredDeletedItem(view: View, deletedItem: ToDoData) {
         val snackBar = Snackbar.make(view, "Deleted ${deletedItem.title}", Snackbar.LENGTH_LONG)
         snackBar.setAction("Undo") {
             mToDoViewModel.insertData(deletedItem)
-            adapter.notifyItemChanged(position)
         }
         snackBar.show()
     }
@@ -129,8 +129,6 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 adapter.setData(it)
             }
         })
-
-
     }
 
 
