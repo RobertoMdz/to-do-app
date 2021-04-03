@@ -99,8 +99,10 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId ==  R.id.menu_delete_all) {
-            confirmItemRemoval()
+        when(item.itemId) {
+            R.id.menu_delete_all -> confirmItemRemoval()
+            R.id.menu_priority_high -> mToDoViewModel.sortByHighPriority.observe(this, Observer { adapter.setData(it)})
+            R.id.menu_priority_low -> mToDoViewModel.sortByLowPriority.observe(this, Observer { adapter.setData(it)})
         }
         return super.onOptionsItemSelected(item)
     }
